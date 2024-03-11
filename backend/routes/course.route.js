@@ -50,7 +50,7 @@ courseRouter.get("/:id", async (req, res) => {
 
 //search route here
 
-courseRouter.use(authenticator);
+courseRouter.use(adminValidator);
 
 courseRouter.post("/", async (req, res) => {
   let token = req.headers.authorization;
@@ -82,7 +82,6 @@ courseRouter.post("/", async (req, res) => {
   });
 });
 
-courseRouter.use(adminValidator);
 
 courseRouter.patch("/:id", async (req, res) => {
   let { id: _id } = req.params;
@@ -124,7 +123,6 @@ courseRouter.delete("/:id", async (req, res) => {
 
 courseRouter.post("/admin", async (req, res) => {
   const token = req.headers.authorization;
-  const page = req.query.page;
 
   jwt.verify(token, process.env.SecretKey, async (err, decoded) => {
     if (err)
@@ -144,9 +142,8 @@ courseRouter.post("/admin", async (req, res) => {
           let data = await CourseModel.find({
             adminId: "admin" + decoded.userId,
             ...req.query,
-          })
-            .skip(page * 5)
-            .limit(5);
+          });
+
           res.send({
             message: "All courses data",
             status: 1,

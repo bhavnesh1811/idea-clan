@@ -33,6 +33,7 @@ userRouter.post("/login", async (req, res) => {
             status: 1,
             name: data[0].name,
             email: data[0].email,
+            role: data[0].role,
             token: token,
             error: false,
           });
