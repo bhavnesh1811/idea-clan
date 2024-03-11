@@ -61,7 +61,7 @@ userRouter.post("/login", async (req, res) => {
 });
 
 userRouter.post("/register", userValidator, async (req, res) => {
-  let { email, name, role, password, phone } = req.body;
+  let { email, name, role, password } = req.body;
 
   if (email && password) {
     bcrypt.hash(password, 5, async (err, hash) => {

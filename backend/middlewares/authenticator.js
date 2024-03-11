@@ -11,7 +11,6 @@ async function authenticator(req, res, next) {
       });
 
     if (decoded) {
-      console.log(decoded);
       if (decoded.role == "deactivate") {
         res.send({
           message: "Your Account is deactivated : Contact Admin",

@@ -1,7 +1,7 @@
 const { UserModel } = require("../models/UserModel");
 
 async function userValidator(req, res, next) {
-  console.log(req.body);
+  // console.log(req.body);
 
   let { email } = req.body;
 
