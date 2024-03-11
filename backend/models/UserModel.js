@@ -5,14 +5,14 @@ const userSchema = mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String },
     password: { type: String },
-    role: { type: String, required: true },
+    role: { type: String, required: true, default: "student" },
   },
   {
     versionKey: false,
   }
 );
 
-const UserModel = mongoose.model("/user", userSchema);
+const UserModel = mongoose.model("user", userSchema);
 
 module.exports = {
   UserModel,

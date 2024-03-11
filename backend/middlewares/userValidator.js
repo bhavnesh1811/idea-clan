@@ -14,7 +14,7 @@ async function userValidator(req, res, next) {
         error: true,
       });
     } else {
-      req.body.role = "user";
+      req.body.role = "student";
       next();
     }
   } catch (error) {

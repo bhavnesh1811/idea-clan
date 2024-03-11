@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-async function authenticator(req, res, next) {
+async function adminValidator(req, res, next) {
   let token = req.headers.authorization;
   jwt.verify(token, process.env.SecretKey, async function (err, decoded) {
     if (err)
@@ -11,15 +11,14 @@ async function authenticator(req, res, next) {
       });
 
     if (decoded) {
-      console.log(decoded);
-      if (decoded.role == "deactivate") {
+      if (decoded.role == "admin") {
+        next();
+      } else {
         res.send({
-          message: "Your Account is deactivated : Contact Admin",
+          message: "Operation not authorised,Please contact admin",
           status: 0,
           error: true,
         });
-      } else {
-        next();
       }
     } else {
       res.send({
@@ -32,5 +31,5 @@ async function authenticator(req, res, next) {
 }
 
 module.exports = {
-  authenticator,
+  adminValidator,
 };

@@ -121,7 +121,7 @@ userRouter.get("/getuser", authenticator, async (req, res) => {
     if (decoded) {
       let { userId, role } = decoded;
       try {
-        if (role == "admin" || role == "superadmin") {
+        if (role == "admin") {
           let data = await UserModel.find({ _id: userId });
           res.send({
             message: "Admin panel approved",

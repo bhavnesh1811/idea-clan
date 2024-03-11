@@ -3,6 +3,8 @@ require("dotenv").config();
 const cors = require("cors");
 const { connection } = require("./configs/db");
 const { userRouter } = require("./routes/user.route");
+const { courseRouter } = require("./routes/course.route");
+const { lectureRouter } = require("./routes/lecture.route");
 
 const app = express();
 app.use(cors());
@@ -17,6 +19,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRouter);
+app.use("/courses", courseRouter);
+app.use("/lectures", lectureRouter);
 
 app.listen(process.env.PORT, async () => {
   try {
