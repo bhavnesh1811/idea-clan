@@ -7,12 +7,11 @@ const { adminValidator } = require("../middlewares/adminValidator");
 const courseRouter = express.Router();
 
 courseRouter.get("/", async (req, res) => {
-  const page = req.query.page || 0;
+
   try {
     let count = await CourseModel.find(req.query).countDocuments();
-    let data = await CourseModel.find(req.query)
-      .skip(page * 10)
-      .limit(10);
+    let data = await CourseModel.find(req.query);
+
     res.send({
       message: "All courses data",
       count: count,
@@ -81,7 +80,6 @@ courseRouter.post("/", async (req, res) => {
     }
   });
 });
-
 
 courseRouter.patch("/:id", async (req, res) => {
   let { id: _id } = req.params;
