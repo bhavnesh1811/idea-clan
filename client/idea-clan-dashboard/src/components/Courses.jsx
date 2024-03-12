@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../redux/courses/course.action";
 import CourseCard from "./CourseCard";
+import Loader from "./Loader";
 
 const Courses = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const Courses = () => {
           Available Courses
         </Heading>
         {course_loading ? (
-          "Loading"
+          <Loader />
         ) : (
           <Grid
             gridTemplateColumns={{

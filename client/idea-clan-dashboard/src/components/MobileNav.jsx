@@ -10,21 +10,35 @@ import {
   MenuList,
   useBreakpointValue,
   useColorMode,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { FiMenu } from "react-icons/fi";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { logOutUser } from "../redux/auth/auth.action";
+import { useNavigate } from "react-router-dom";
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const isMobile = useBreakpointValue({ base: true, sm: false });
   const dispatch = useDispatch();
+  const toast = useToast();
+  const token = sessionStorage.getItem("token") || "";
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logOutUser());
+
+    toast({
+      title: "LogOut Success",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+    navigate("/");
   };
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -52,7 +66,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
           {colorMode === "light" ? <FaMoon /> : <FaSun />}
         </Button>
         {!isMobile && (
-          <Flex alignItems={"center"}>
+          <Flex alignItems={"center"} display={token ? "flex" : "none"}>
             <Menu>
               <MenuButton
                 py={2}
@@ -64,7 +78,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                 </HStack>
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
               </MenuList>
             </Menu>
           </Flex>

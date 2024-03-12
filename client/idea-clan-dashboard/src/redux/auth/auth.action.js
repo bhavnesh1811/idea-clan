@@ -37,7 +37,7 @@ export const login = (userData) => async (dispatch) => {
 
   try {
     const res = await axios.post(`${BASE_URL}/users/login`, userData);
-    console.log(res);
+
     if (res.data.status === 1) {
       dispatch(
         loginSuccessAction({

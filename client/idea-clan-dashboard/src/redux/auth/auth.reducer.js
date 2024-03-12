@@ -59,6 +59,7 @@ export const authReducer = (state = initalState, { type, payload }) => {
         token: "",
         name: "",
         email: "",
+        role:"",
         currentCourse: "",
         isLoading: false,
         isError: false,
