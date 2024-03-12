@@ -85,11 +85,12 @@ courseRouter.patch("/:id", async (req, res) => {
   let { id: _id } = req.params;
 
   try {
-    await CourseModel.findByIdAndUpdate({ _id }, req.body);
+    const upDatadData=await CourseModel.findByIdAndUpdate({ _id }, req.body);
     res.send({
       message: "Course updated",
       status: 1,
       error: false,
+      upDatadData
     });
   } catch (error) {
     res.send({
