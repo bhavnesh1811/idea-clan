@@ -2,8 +2,8 @@ import { Box, Flex, Grid, Heading } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../redux/courses/course.action";
-import CourseCard from "./CourseCard";
-import Loader from "./Loader";
+import CourseCard from "../components/CourseCard";
+import Loader from "../components/Loader";
 import AddCourse from "../modals/AddCourse";
 
 const Courses = () => {

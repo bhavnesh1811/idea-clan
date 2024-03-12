@@ -4,6 +4,7 @@ import {
   EDIT_LECTURE_SUCCESS,
   GET_LECTURE_SUCCESS,
   DELETE_LECTURE_SUCCESS,
+  ADD_LECTURE_SUCCESS,
 } from "./lecture.type";
 
 // console.log(localStorage.getItem("token"));
@@ -29,6 +30,11 @@ export const lectureReducer = (state = initalState, { type, payload }) => {
         ...state,
         lecture_loading: false,
         lecture_error: true,
+      };
+      case ADD_LECTURE_SUCCESS:
+      return {
+        ...state,
+        lectures: [...state.lectures,payload]
       };
     case EDIT_LECTURE_SUCCESS:
       return {

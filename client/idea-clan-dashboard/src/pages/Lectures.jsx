@@ -7,12 +7,14 @@ import {
   Th,
   TableContainer,
   Heading,
+  Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import LectureCard from "../components/LectureCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getAlllectures } from "../redux/lectures/lecture.action";
 import Loader from "../components/Loader";
+import AddLecture from "../modals/AddLecture";
 
 const Lectures = () => {
   const [lectureData, setLectureData] = useState([]);
@@ -35,6 +37,11 @@ const Lectures = () => {
       <Heading as="h1" size="xl" my="16px">
         Available Lectures
       </Heading>
+      {role === "admin" && (
+        <Flex  justifyContent={"flex-end"} mb="16px">
+          <AddLecture />
+        </Flex>
+      )}
       {lecture_loading ? (
         <Loader />
       ) : (

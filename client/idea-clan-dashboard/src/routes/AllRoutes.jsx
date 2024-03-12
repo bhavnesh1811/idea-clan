@@ -4,9 +4,10 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import DashBoard from "../pages/DashBoard";
 import PrivateRoute from "./PrivateRoute";
-import Courses from "../components/Courses";
+
 import Profile from "../pages/Profile";
 import Lectures from "../pages/Lectures";
+import Courses from "../pages/Courses";
 
 const AllRoutes = () => {
   return (

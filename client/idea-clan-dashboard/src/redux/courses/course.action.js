@@ -43,7 +43,7 @@ export const getAllCourses = () => async (dispatch) => {
 
 export const addCourseDetails = (data) => async (dispatch) => {
   try {
-    const res = await axios.post(`http://localhost:5500/courses`, data, config);
+    const res = await axios.post(`${BASE_URL}/courses`, data, config);
 
     if (res && res?.data) {
       dispatch({
