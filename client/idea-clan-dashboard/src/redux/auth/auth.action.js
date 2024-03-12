@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import {
+  LOGOUT,
   USER_LOGIN_FAILURE,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -19,9 +20,16 @@ const loginSuccessAction = (payload) => {
 const signUpSuccessAction = () => {
   return { type: USER_SIGNUP_SUCCESS };
 };
+const logOutSuccessAction = () => {
+  return { type: LOGOUT };
+};
 
 const loginFailureAction = () => {
   return { type: USER_LOGIN_FAILURE };
+};
+
+export const logOutUser = () => (dispatch) => {
+  dispatch(logOutSuccessAction());
 };
 
 export const login = (userData) => async (dispatch) => {
@@ -54,10 +62,7 @@ export const registerUser = (userData) => async (dispatch) => {
   dispatch(loginRequestAction());
 
   try {
-    const res = await axios.post(
-      `${BASE_URL}/users/register`,
-      userData
-    );
+    const res = await axios.post(`${BASE_URL}/users/register`, userData);
 
     if (res.data.status === 1) {
       dispatch(signUpSuccessAction());

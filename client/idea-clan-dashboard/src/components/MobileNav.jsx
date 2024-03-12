@@ -14,10 +14,17 @@ import {
 import React from "react";
 import { FiMenu } from "react-icons/fi";
 import { FaMoon, FaSun } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { logOutUser } from "../redux/auth/auth.action";
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const isMobile = useBreakpointValue({ base: true, sm: false });
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logOutUser());
+  };
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -57,7 +64,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                 </HStack>
               </MenuButton>
               <MenuList>
-                <MenuItem>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </MenuList>
             </Menu>
           </Flex>
