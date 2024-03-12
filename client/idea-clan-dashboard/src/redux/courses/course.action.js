@@ -1,5 +1,11 @@
 import axios from "axios";
-import { COURSE_ERROR, COURSE_LOADING, GET_COURSE_SUCCESS } from "./course.type";
+import {
+  COURSE_ERROR,
+  COURSE_LOADING,
+  DELETE_COURSE_SUCCESS,
+  EDIT_COURSE_SUCCESS,
+  GET_COURSE_SUCCESS,
+} from "./course.type";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -19,17 +25,14 @@ export const getAllCourses = () => async (dispatch) => {
   dispatch(courseLoadingAction());
 
   try {
-    const res = await axios.get(`${BASE_URL}/courses`,{
-      headers:{
-        Authorization:sessionStorage.getItem("token"),
-        "Content-Type":"application/json"
-      }
+    const res = await axios.get(`${BASE_URL}/courses`, {
+      headers: {
+        Authorization: sessionStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
     });
-    console.log(res);
     if (res.data.status === 1) {
-      dispatch(
-        courseSuccessAction(res.data.data)
-      );
+      dispatch(courseSuccessAction(res.data.data));
       return { status: res.data.status, msg: res.data.message };
     } else {
       dispatch(courseFailureAction());
@@ -41,3 +44,45 @@ export const getAllCourses = () => async (dispatch) => {
   }
 };
 
+export const editCourseDetails = (courseId, data) => async (dispatch) => {
+  try {
+    const res = await axios.patch(`${BASE_URL}/courses/${courseId}`, data, {
+      headers: {
+        Authorization: sessionStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res && res?.data) {
+      dispatch({
+        type: EDIT_COURSE_SUCCESS,
+        payload: { id: courseId, upDatedData: data },
+      });
+    }
+
+    return { message: "success" };
+  } catch (error) {
+    return { message: "error" };
+  }
+};
+export const deleteCourseDetails = (courseId) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`${BASE_URL}/courses/${courseId}`, {
+      headers: {
+        Authorization: sessionStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res && res?.data) {
+      dispatch({
+        type: DELETE_COURSE_SUCCESS,
+        payload: { id: courseId},
+      });
+    }
+
+    return { message: "success" };
+  } catch (error) {
+    return { message: "error" };
+  }
+};

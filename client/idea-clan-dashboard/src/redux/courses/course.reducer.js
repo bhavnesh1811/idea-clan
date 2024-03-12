@@ -1,10 +1,11 @@
 import {
   COURSE_ERROR,
   COURSE_LOADING,
+  DELETE_COURSE_SUCCESS,
+  EDIT_COURSE_SUCCESS,
   GET_COURSE_SUCCESS,
 } from "./course.type";
 
-// console.log(localStorage.getItem("token"));
 const initalState = {
   course_loading: false,
   course_error: false,
@@ -27,6 +28,21 @@ export const courseReducer = (state = initalState, { type, payload }) => {
         ...state,
         course_loading: false,
         course_error: true,
+      };
+    case EDIT_COURSE_SUCCESS:
+      return {
+        ...state,
+        courses: state.courses.map((course) => {
+          if (course?._id === payload.id) {
+            return { ...course, ...payload.upDatedData };
+          }
+          return course;
+        }),
+      };
+    case DELETE_COURSE_SUCCESS:
+      return {
+        ...state,
+        courses: state.courses.filter((course) => course._id !== payload.id),
       };
 
     default:
