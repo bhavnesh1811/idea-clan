@@ -65,11 +65,12 @@ courseRouter.post("/", async (req, res) => {
     //   el.adminId = "admin" + decoded.userId;
     // });
     try {
-      await CourseModel.insertMany(req.body);
+      const data=await CourseModel.insertMany(req.body);
       res.send({
         message: "Course added",
         status: 1,
         error: false,
+        data
       });
     } catch (error) {
       res.send({
