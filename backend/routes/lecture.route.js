@@ -65,11 +65,12 @@ lectureRouter.post("/", async (req, res) => {
     //   el.adminId = "admin" + decoded.userId;
     // });
     try {
-      await LectureModel.insertMany(req.body);
+      const data=await LectureModel.insertMany(req.body);
       res.send({
         message: "Lecture added",
         status: 1,
         error: false,
+        data,
       });
     } catch (error) {
       res.send({
