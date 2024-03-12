@@ -1,4 +1,5 @@
 import {
+  ADD_COURSE_SUCCESS,
   COURSE_ERROR,
   COURSE_LOADING,
   DELETE_COURSE_SUCCESS,
@@ -28,6 +29,11 @@ export const courseReducer = (state = initalState, { type, payload }) => {
         ...state,
         course_loading: false,
         course_error: true,
+      };
+    case ADD_COURSE_SUCCESS:
+      return {
+        ...state,
+        courses: [...state.courses,payload]
       };
     case EDIT_COURSE_SUCCESS:
       return {

@@ -1,4 +1,4 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { IoMdAdd } from "react-icons/io";
 import {
   Modal,
   ModalOverlay,
@@ -17,18 +17,18 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addCourseDetails } from "../redux/courses/course.action";
 
 const AddCourse = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    duration:""
+    duration: "",
   });
 
   const resetFormData = () => {
@@ -45,10 +45,22 @@ const AddCourse = () => {
   };
 
   const addCourse = () => {
-    dispatch(addUserCourse(formData)).then(({ message }) => {
+    if (
+      formData.title.trim() === "" ||
+      formData.description.trim() === "" ||
+      formData.duration.trim() === ""
+    ) {
+      return toast({
+        title: "Please fill All Fields",
+        status: "error",
+        duration: 3000,
+        position: "top-right",
+      });
+    }
+    dispatch(addCourseDetails(formData)).then(({ message }) => {
       if (message === "success") {
         toast({
-          title: "Course Details Updated",
+          title: "Course Details Added",
           status: "success",
           duration: 3000,
           position: "top-right",
@@ -56,7 +68,7 @@ const AddCourse = () => {
       }
       if (message === "error") {
         toast({
-          title: "Course Details Not Updated",
+          title: "Course Details Not Added",
           status: "error",
           duration: 3000,
           position: "top-right",
@@ -75,12 +87,13 @@ const AddCourse = () => {
         gap="8px"
         onClick={onOpen}
         p="4px 12px"
+        cursor={"pointer"}
       >
-        <AddIcon />
-        <Text textStyle={"body1"}>Add New</Text>
+        <IoMdAdd />
+        <Text>Add New</Text>
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add Course Form</ModalHeader>

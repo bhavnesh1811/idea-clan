@@ -5,7 +5,9 @@ import {
   EDIT_LECTURE_SUCCESS,
   GET_LECTURE_SUCCESS,
   DELETE_LECTURE_SUCCESS,
+  ADD_LECTURE_SUCCESS,
 } from "./lecture.type";
+import { config } from "../../configs/config";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -25,16 +27,10 @@ export const getAlllectures = () => async (dispatch) => {
   dispatch(lectureLoadingAction());
 
   try {
-    const res = await axios.get(`${BASE_URL}/lectures`, {
-      headers: {
-        Authorization: sessionStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.get(`${BASE_URL}/lectures`, config);
 
     if (res.data.status === 1) {
       dispatch(lectureSuccessAction(res.data.data));
-      
     } else {
       dispatch(lectureFailureAction());
       return { status: res.data.status, msg: res.data.message };
@@ -45,19 +41,35 @@ export const getAlllectures = () => async (dispatch) => {
   }
 };
 
+export const addLectureDetails = (data) => async (dispatch) => {
+  try {
+    const res = await axios.post(`${BASE_URL}/lectures`, data, config);
+
+    if (res && res?.data) {
+      dispatch({
+        type: ADD_LECTURE_SUCCESS,
+        payload: data,
+      });
+    }
+
+    return { message: "success" };
+  } catch (error) {
+    return { message: "error" };
+  }
+};
+
 export const editlectureDetails = (lectureId, data) => async (dispatch) => {
   try {
-    const res = await axios.patch(`${BASE_URL}/lectures/${lectureId}`, data, {
-      headers: {
-        Authorization: sessionStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.patch(
+      `${BASE_URL}/lectures/${lectureId}`,
+      data,
+      config
+    );
 
     if (res && res?.data) {
       dispatch({
         type: EDIT_LECTURE_SUCCESS,
-        payload: {id:lectureId, upDatedData: data},
+        payload: { id: lectureId, upDatedData: data },
       });
     }
 
@@ -69,17 +81,12 @@ export const editlectureDetails = (lectureId, data) => async (dispatch) => {
 
 export const deletelectureDetails = (lectureId) => async (dispatch) => {
   try {
-    const res = await axios.delete(`${BASE_URL}/lectures/${lectureId}`, {
-      headers: {
-        Authorization: sessionStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.delete(`${BASE_URL}/lectures/${lectureId}`, config);
 
     if (res && res?.data) {
       dispatch({
         type: DELETE_LECTURE_SUCCESS,
-        payload: { id: lectureId},
+        payload: { id: lectureId },
       });
     }
 

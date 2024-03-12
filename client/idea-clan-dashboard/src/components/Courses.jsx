@@ -1,9 +1,10 @@
-import { Box, Grid, Heading } from "@chakra-ui/react";
+import { Box, Flex, Grid, Heading } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../redux/courses/course.action";
 import CourseCard from "./CourseCard";
 import Loader from "./Loader";
+import AddCourse from "../modals/AddCourse";
 
 const Courses = () => {
   const dispatch = useDispatch();
@@ -11,7 +12,7 @@ const Courses = () => {
     (store) => store.courseReducer
   );
   const [courseData, setCourseData] = useState([]);
-  
+  const role = sessionStorage.getItem("role") || "";
   useEffect(() => {
     dispatch(getAllCourses());
     // eslint-disable-next-line
@@ -25,6 +26,11 @@ const Courses = () => {
       <Heading as="h1" size="xl" my="16px">
         Available Courses
       </Heading>
+      {role === "admin" && (
+        <Flex  justifyContent={"flex-end"} mb="16px">
+          <AddCourse />
+        </Flex>
+      )}
       {course_loading ? (
         <Loader />
       ) : (
