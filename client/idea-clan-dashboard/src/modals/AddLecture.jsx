@@ -64,7 +64,7 @@ const AddLecture = () => {
   };
 
   const addLecture = () => {
-    console.log(formData);
+    // console.log(formData);
     if (
       formData.title.trim() === "" ||
       formData.name.trim() === "" ||

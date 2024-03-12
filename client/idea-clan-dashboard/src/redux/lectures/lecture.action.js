@@ -44,7 +44,7 @@ export const getAlllectures = () => async (dispatch) => {
 export const addLectureDetails = (data) => async (dispatch) => {
   try {
     const res = await axios.post(`${BASE_URL}/lectures`, data, config);
-console.log(res);
+// console.log(res);
     if (res && res?.data) {
       dispatch({
         type: ADD_LECTURE_SUCCESS,

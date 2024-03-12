@@ -43,7 +43,7 @@ function Signup() {
     setterState(e.target.value);
   };
 
-  const handleSignIn = (e) => {
+  const handleSignUp = (e) => {
     e.preventDefault();
     setLoading(true);
     const credentials = {
@@ -73,7 +73,7 @@ function Signup() {
       setLoading(false);
 
       if (status === 1) {
-        location.state ? navigate(location.state) : navigate("/");
+        navigate("/login");
       }
     });
   };
@@ -97,7 +97,7 @@ function Signup() {
           p={8}
           rounded="lg"
         >
-          <Stack as="form" onSubmit={handleSignIn} spacing={4}>
+          <Stack as="form" onSubmit={handleSignUp} spacing={4}>
             <Heading as="h3" textAlign="center">
               Sign Up
             </Heading>
