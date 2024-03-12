@@ -61,9 +61,9 @@ lectureRouter.post("/", async (req, res) => {
         error: true,
       });
 
-    req.body.forEach((el) => {
-      el.adminId = "admin" + decoded.userId;
-    });
+    // req.body.forEach((el) => {
+    //   el.adminId = "admin" + decoded.userId;
+    // });
     try {
       await LectureModel.insertMany(req.body);
       res.send({
