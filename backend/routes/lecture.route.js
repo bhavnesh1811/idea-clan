@@ -7,14 +7,13 @@ const { adminValidator } = require("../middlewares/adminValidator");
 const lectureRouter = express.Router();
 
 lectureRouter.get("/", async (req, res) => {
-  const page = req.query.page || 0;
+  
   try {
     let count = await LectureModel.find(req.query).countDocuments();
     let data = await LectureModel.find(req.query)
-      .skip(page * 10)
-      .limit(10);
+      
     res.send({
-      message: "All courses data",
+      message: "All lectures data",
       count: count,
       status: 1,
       data: data,
@@ -34,7 +33,7 @@ lectureRouter.get("/:id", async (req, res) => {
   try {
     let data = await LectureModel.find({ _id });
     res.send({
-      message: "Course data",
+      message: "Lecture data",
       status: 1,
       data: data,
       error: false,
@@ -68,7 +67,7 @@ lectureRouter.post("/", async (req, res) => {
     try {
       await LectureModel.insertMany(req.body);
       res.send({
-        message: "Course added",
+        message: "Lecture added",
         status: 1,
         error: false,
       });
@@ -90,7 +89,7 @@ lectureRouter.patch("/:id", async (req, res) => {
   try {
     await LectureModel.findByIdAndUpdate({ _id }, req.body);
     res.send({
-      message: "Course updated",
+      message: "Lecture updated",
       status: 1,
       error: false,
     });
@@ -109,7 +108,7 @@ lectureRouter.delete("/:id", async (req, res) => {
   try {
     await LectureModel.findByIdAndDelete({ _id });
     res.send({
-      message: "Course deleted",
+      message: "Lecture deleted",
       status: 1,
       error: false,
     });
@@ -148,7 +147,7 @@ lectureRouter.post("/admin", async (req, res) => {
             .skip(page * 5)
             .limit(5);
           res.send({
-            message: "All courses data",
+            message: "All lectures data",
             status: 1,
             data: data,
             error: false,
@@ -170,7 +169,7 @@ lectureRouter.post("/admin", async (req, res) => {
             .skip(page * 5)
             .limit(5);
           res.send({
-            message: "All courses data",
+            message: "All lectures data",
             status: 1,
             data: data,
             count: count,

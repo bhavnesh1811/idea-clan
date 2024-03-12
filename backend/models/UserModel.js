@@ -5,8 +5,9 @@ const userSchema = mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String },
     password: { type: String },
+    applied: { type: Boolean,default: false },
     role: { type: String, required: true, default: "student" },
-    currentCourse: { type: String, default: "" },
+    currentCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'course' }],
   },
   {
     versionKey: false,

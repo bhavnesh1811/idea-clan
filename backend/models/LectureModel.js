@@ -8,6 +8,7 @@ const lectureSchema = mongoose.Schema({
   instructor: { type: String, required: true },
   description: { type: String, required: true },
   link: { type: String, required: true },
+  course: { type: mongoose.Schema.Types.ObjectId, ref: 'course', required: true },
 });
 
 const LectureModel = mongoose.model("lecture", lectureSchema);
