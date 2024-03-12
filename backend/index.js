@@ -7,7 +7,7 @@ const { courseRouter } = require("./routes/course.route");
 const { lectureRouter } = require("./routes/lecture.route");
 
 const app = express();
-app.use(cors());
+app.use(cors({ methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
