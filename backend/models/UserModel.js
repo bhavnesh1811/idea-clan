@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema(
     email: { type: String },
     password: { type: String },
     role: { type: String, required: true, default: "student" },
+    currentCourse: { type: String, default: "" },
   },
   {
     versionKey: false,

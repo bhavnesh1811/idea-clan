@@ -8,7 +8,6 @@ const { authenticator } = require("../middlewares/authenticator");
 const { UserModel } = require("../models/UserModel");
 const { userValidator } = require("../middlewares/userValidator");
 
-
 userRouter.post("/login", async (req, res) => {
   let { email, password } = req.body;
 
@@ -34,6 +33,7 @@ userRouter.post("/login", async (req, res) => {
             name: data[0].name,
             email: data[0].email,
             role: data[0].role,
+            currentCourse: data[0].currentCourse,
             token: token,
             error: false,
           });
@@ -108,7 +108,6 @@ userRouter.post("/register", userValidator, async (req, res) => {
   }
 });
 
-
 userRouter.get("/getuser", authenticator, async (req, res) => {
   let token = req.headers.authorization;
   jwt.verify(token, process.env.SecretKey, async (err, decoded) => {
@@ -158,13 +157,11 @@ userRouter.get("/getuser", authenticator, async (req, res) => {
 
 userRouter.get("/admin", async (req, res) => {
   let { role } = req.headers;
-  let page = req.query.page || 0;
 
   try {
     let count = await UserModel.find({ role }).countDocuments();
-    let data = await UserModel.find({ role })
-      .skip(page * 5)
-      .limit(5);
+    let data = await UserModel.find({ role });
+
     res.send({
       message: "All users data",
       status: 1,
