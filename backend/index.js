@@ -7,7 +7,12 @@ const { courseRouter } = require("./routes/course.route");
 const { lectureRouter } = require("./routes/lecture.route");
 
 const app = express();
-app.use(cors({ methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://idea-clan-dashboard.vercel.app"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
