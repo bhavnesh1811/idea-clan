@@ -1,16 +1,31 @@
 import { Button, Flex, Heading, Text, useToast } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { MdDelete } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 import EditCourse from "../modals/EditCourse";
 import { useDispatch } from "react-redux";
 import { deleteCourseDetails } from "../redux/courses/course.action";
+import axios from "axios";
+import { config } from "../configs/config";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const CourseCard = (course) => {
-  const navigate = useNavigate();
   const role = sessionStorage.getItem("role") || "";
   const dispatch = useDispatch();
   const toast = useToast();
+
+  const applyCourse = async (id) => {
+    const data = {
+      currentCourse: id,
+    };
+    try {
+      const res = await axios.patch(
+        `${BASE_URL}/users/apply-course`,
+        data,
+        config
+      );
+      console.log(res);
+    } catch (error) {}
+  };
   const deleteCourse = (courseId) => {
     dispatch(deleteCourseDetails(courseId)).then(({ message }) => {
       if (message === "success") {
@@ -67,8 +82,8 @@ const CourseCard = (course) => {
         w="full"
         variant={"filled"}
         colorScheme="blue"
-        onClick={() => navigate("/")}
         display={role === "admin" ? "none" : "block"}
+        onClick={() => applyCourse(course._id)}
       >
         Apply
       </Button>
