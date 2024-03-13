@@ -1,17 +1,15 @@
 const express = require("express");
 const { LectureModel } = require("../models/LectureModel");
 const jwt = require("jsonwebtoken");
-const { authenticator } = require("../middlewares/authenticator");
 const { adminValidator } = require("../middlewares/adminValidator");
 
 const lectureRouter = express.Router();
 
 lectureRouter.get("/", async (req, res) => {
-  
   try {
     let count = await LectureModel.find(req.query).countDocuments();
-    let data = await LectureModel.find(req.query)
-      
+    let data = await LectureModel.find(req.query);
+
     res.send({
       message: "All lectures data",
       count: count,
@@ -47,42 +45,27 @@ lectureRouter.get("/:id", async (req, res) => {
   }
 });
 
-//search route here
-
-lectureRouter.use(authenticator);
-
-lectureRouter.post("/", async (req, res) => {
-  let token = req.headers.authorization;
-  jwt.verify(token, process.env.SecretKey, async function (err, decoded) {
-    if (err)
-      res.send({
-        message: "Something went wrong: " + err,
-        status: 0,
-        error: true,
-      });
-
-    // req.body.forEach((el) => {
-    //   el.adminId = "admin" + decoded.userId;
-    // });
-    try {
-      const data=await LectureModel.insertMany(req.body);
-      res.send({
-        message: "Lecture added",
-        status: 1,
-        error: false,
-        data,
-      });
-    } catch (error) {
-      res.send({
-        message: "Something went wrong: " + error.message,
-        status: 0,
-        error: true,
-      });
-    }
-  });
-});
 
 lectureRouter.use(adminValidator);
+
+lectureRouter.post("/", async (req, res) => {
+  try {
+    const data = await LectureModel.insertMany(req.body);
+    res.send({
+      message: "Lecture added",
+      status: 1,
+      error: false,
+      data,
+    });
+  } catch (error) {
+    res.send({
+      message: "Something went wrong: " + error.message,
+      status: 0,
+      error: true,
+    });
+  }
+});
+
 
 lectureRouter.patch("/:id", async (req, res) => {
   let { id: _id } = req.params;

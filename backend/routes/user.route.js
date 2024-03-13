@@ -108,51 +108,42 @@ userRouter.post("/register", userValidator, async (req, res) => {
   }
 });
 
-userRouter.get("/getuser", authenticator, async (req, res) => {
-  let token = req.headers.authorization;
-  jwt.verify(token, process.env.SecretKey, async (err, decoded) => {
-    if (err)
-      res.send({
-        message: "Invalid token",
-        status: 0,
-        error: true,
-      });
+userRouter.get("/getusers", authenticator, async (req, res) => {
+  const { id } = req.body;
+  try {
+    const user = await UserModel.findById(id);
+    res.send({ message: "currentUser", user });
+  } catch (error) {
+    res.send({
+      message: "Something went wrong: " + error.message,
+    });
+  }
+});
 
-    if (decoded) {
-      let { userId, role } = decoded;
-      try {
-        if (role == "admin") {
-          let data = await UserModel.find({ _id: userId });
-          res.send({
-            message: "Admin panel approved",
-            role: role,
-            userId: userId,
-            name: data[0].name,
-            status: 1,
-            error: false,
-          });
-        } else {
-          res.send({
-            message: "Restricted Area",
-            status: 0,
-            error: true,
-          });
-        }
-      } catch (error) {
-        res.send({
-          message: "Something went wrong: " + error.message,
-          status: 0,
-          error: true,
-        });
-      }
-    } else {
-      res.send({
-        message: "Invalid token",
-        status: 0,
-        error: true,
-      });
+userRouter.patch("/apply-course", authenticator, async (req, res) => {
+  const { id, courseId } = req.body;
+  try {
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return res.send({ error: "User not found" });
     }
-  });
+
+    if (user.currentCourses.includes(courseId)) {
+      return res.send({ error: "Course already applied" });
+    }
+
+    user.currentCourses.push(courseId);
+
+    await user.save();
+
+    res.send({ message: "Course applied successfully", user });
+  } catch (error) {
+    res.send({
+      message: "Something went wrong: " + error.message,
+      status: 0,
+      error: true,
+    });
+  }
 });
 
 userRouter.get("/admin", async (req, res) => {

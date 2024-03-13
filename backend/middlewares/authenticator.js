@@ -18,6 +18,7 @@ async function authenticator(req, res, next) {
           error: true,
         });
       } else {
+        req.body.id = decoded.userId;
         next();
       }
     } else {

@@ -1,13 +1,11 @@
 const express = require("express");
 const { CourseModel } = require("../models/CourseModel");
 const jwt = require("jsonwebtoken");
-const { authenticator } = require("../middlewares/authenticator");
 const { adminValidator } = require("../middlewares/adminValidator");
 
 const courseRouter = express.Router();
 
 courseRouter.get("/", async (req, res) => {
-
   try {
     let count = await CourseModel.find(req.query).countDocuments();
     let data = await CourseModel.find(req.query);
@@ -52,46 +50,33 @@ courseRouter.get("/:id", async (req, res) => {
 courseRouter.use(adminValidator);
 
 courseRouter.post("/", async (req, res) => {
-  let token = req.headers.authorization;
-  jwt.verify(token, process.env.SecretKey, async function (err, decoded) {
-    if (err)
-      res.send({
-        message: "Something went wrong: " + err,
-        status: 0,
-        error: true,
-      });
-
-    // req.body.forEach((el) => {
-    //   el.adminId = "admin" + decoded.userId;
-    // });
-    try {
-      const data=await CourseModel.insertMany(req.body);
-      res.send({
-        message: "Course added",
-        status: 1,
-        error: false,
-        data
-      });
-    } catch (error) {
-      res.send({
-        message: "Something went wrong: " + error.message,
-        status: 0,
-        error: true,
-      });
-    }
-  });
+  try {
+    const data = await CourseModel.insertMany(req.body);
+    res.send({
+      message: "Course added",
+      status: 1,
+      error: false,
+      data,
+    });
+  } catch (error) {
+    res.send({
+      message: "Something went wrong: " + error.message,
+      status: 0,
+      error: true,
+    });
+  }
 });
 
 courseRouter.patch("/:id", async (req, res) => {
   let { id: _id } = req.params;
 
   try {
-    const upDatedData=await CourseModel.findByIdAndUpdate({ _id }, req.body);
+    const upDatedData = await CourseModel.findByIdAndUpdate({ _id }, req.body);
     res.send({
       message: "Course updated",
       status: 1,
       error: false,
-      upDatedData
+      upDatedData,
     });
   } catch (error) {
     res.send({
