@@ -5,6 +5,18 @@ Welcome to Idea Clan project! This project is a comprehensive LMS designed to fa
 ## Deployed Link
 https://idea-clan-dashboard.vercel.app
 
+## Credentials
+
+For Admin--> 
+    ```
+    email:admin@gmail.com
+    password:admin
+    ```
+For User--> 
+    ```
+    User can register directly
+    ```
+
 ## Features
 
 - Courses Page.
