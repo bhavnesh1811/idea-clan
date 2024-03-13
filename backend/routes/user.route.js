@@ -112,7 +112,7 @@ userRouter.get("/getusers", authenticator, async (req, res) => {
   const { id } = req.body;
   try {
     const user = await UserModel.find({_id:id});
-    res.send({ message: "currentUser", user:user[0] });
+    res.send({ message: "currentUser", user });
   } catch (error) {
     res.send({
       message: "Something went wrong: " + error.message,
