@@ -111,8 +111,8 @@ userRouter.post("/register", userValidator, async (req, res) => {
 userRouter.get("/getusers", authenticator, async (req, res) => {
   const { id } = req.body;
   try {
-    const user = await UserModel.findById(id);
-    res.send({ message: "currentUser", user });
+    const user = await UserModel.find({_id:id});
+    res.send({ message: "currentUser", user:user[0] });
   } catch (error) {
     res.send({
       message: "Something went wrong: " + error.message,
