@@ -1,5 +1,6 @@
 import { Button, Flex, Heading, Text, useToast } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import EditCourse from "../modals/EditCourse";
 import { useDispatch } from "react-redux";
@@ -8,14 +9,33 @@ import axios from "axios";
 import { config } from "../configs/config";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const CourseCard = (course) => {
+const CourseCard = ({ course, currentCourses, setCurrentCourses }) => {
   const role = sessionStorage.getItem("role") || "";
   const dispatch = useDispatch();
   const toast = useToast();
+  const navigate = useNavigate();
+
+  const getUser = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/users/getusers`, config);
+
+      setCurrentCourses(res?.data?.user[0]?.currentCourses);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const applyCourse = async (id) => {
+    if (currentCourses?.length === 3) {
+      return toast({
+        title: "Course Applied Limit Exceeded",
+        status: "success",
+        duration: 3000,
+        position: "top-right",
+      });
+    }
     const data = {
-      currentCourse: id,
+      courseId: id,
     };
     try {
       const res = await axios.patch(
@@ -23,8 +43,19 @@ const CourseCard = (course) => {
         data,
         config
       );
-      console.log(res);
-    } catch (error) {}
+
+      if (res.data.message === "Course applied successfully") {
+        toast({
+          title: "Course Applied",
+          status: "success",
+          duration: 3000,
+          position: "top-right",
+        });
+      }
+      getUser();
+    } catch (error) {
+      console.log(error);
+    }
   };
   const deleteCourse = (courseId) => {
     dispatch(deleteCourseDetails(courseId)).then(({ message }) => {
@@ -56,6 +87,7 @@ const CourseCard = (course) => {
       overflow="hidden"
       _hover={{ boxShadow: "lg", cursor: "pointer" }}
       p={3}
+      h="-webkit-fit-content"
     >
       {role === "admin" && (
         <Flex justifyContent={"end"} gap="8px">
@@ -64,7 +96,7 @@ const CourseCard = (course) => {
           <MdDelete onClick={() => deleteCourse(course._id)} />
         </Flex>
       )}
-      <Heading as="h2" size="md">
+      <Heading as="h2" size="md" justifyContent={"flex-start"}>
         {course?.title}
       </Heading>
       <Text
@@ -80,13 +112,29 @@ const CourseCard = (course) => {
       </Text>
       <Button
         w="full"
-        variant={"filled"}
+        variant={"outline"}
         colorScheme="blue"
         display={role === "admin" ? "none" : "block"}
         onClick={() => applyCourse(course._id)}
+        isDisabled={
+          currentCourses?.includes(course._id) || currentCourses?.length === 3
+            ? true
+            : false
+        }
       >
         Apply
       </Button>
+      {currentCourses?.includes(course._id) && (
+        <Button
+          w="full"
+          variant={"outline"}
+          colorScheme="blue"
+          display={role === "admin" ? "none" : "block"}
+          onClick={() => navigate("/lectures")}
+        >
+          View Lectures
+        </Button>
+      )}
     </Flex>
   );
 };

@@ -71,7 +71,7 @@ function Login() {
       setLoading(false);
 
       if (status === 1) {
-        location.state ? navigate(location.state) : navigate("/courses");
+        location.state ? navigate(location.state) : navigate("/");
       }
     });
   };

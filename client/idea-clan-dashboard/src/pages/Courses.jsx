@@ -16,27 +16,22 @@ const Courses = () => {
   );
   const [courseData, setCourseData] = useState([]);
   const role = sessionStorage.getItem("role") || "";
-  const currentCourses = sessionStorage.getItem("currentCourses") || [];
+  const [currentCourses, setCurrentCourses] = useState([]);
+
   const getUser = async () => {
     try {
-     
-      console.log(BASE_URL,config);
-      const res = await axios.get(`${BASE_URL}/users/getusers`, {
-        headers: {
-          Authorization: sessionStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(res);
+      const res = await axios.get(`${BASE_URL}/users/getusers`, config);
+      // console.log(res?.data?.user[0]?.currentCourses);
+      setCurrentCourses(res?.data?.user[0]?.currentCourses);
     } catch (error) {
-      console.log(error,"25");
+      console.log(error);
     }
   };
-
   useEffect(() => {
     getUser();
   }, []);
   useEffect(() => {
+    
     dispatch(getAllCourses());
     // eslint-disable-next-line
   }, []);
@@ -56,7 +51,7 @@ const Courses = () => {
       )}
       {role === "student" && (
         <Flex justifyContent={"flex-end"} mb="16px">
-          <Text>You have applied for {currentCourses?.length} courses</Text>
+          <Text>You have applied for {currentCourses?.length?currentCourses?.length:0} courses (Max Limit:3)</Text>
         </Flex>
       )}
       {course_loading ? (
@@ -71,8 +66,13 @@ const Courses = () => {
           gap="16px"
         >
           {courseData &&
-            courseData.map((course, index) => (
-              <CourseCard {...course} key={index} />
+            courseData?.map((course, index) => (
+              <CourseCard
+                key={index}
+                course={course}
+                currentCourses={currentCourses}
+                setCurrentCourses={setCurrentCourses}
+              />
             ))}
         </Grid>
       )}
